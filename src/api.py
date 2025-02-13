@@ -1,6 +1,6 @@
 import requests
+import os
 from typing import Dict, Optional
-from urllib.parse import quote  # needed to parse city names that have spaces, which are considered special characters
 
 class WeatherAPIError(Exception):
     pass
@@ -13,16 +13,13 @@ def fetch_weather_data(api_key: str, city: str,  state: str = None, country: str
     else:
         location = f"{city},{country}"
 
-    # encode the location to handle spaces and special characters if any
-    encoded_location = quote(location)
-
-    base_url = "http://api.openweathermap.org/data/2.5/weather"
+    base_url = os.getenv("BASE_URL")
 
     try:
         response = requests.get(
             base_url,
             params={
-                "q": encoded_location,
+                "q": location,
                 "appid": api_key,  # appid is required parameter naming convention per OpenWeather api documentation
                 "units": units
             },
@@ -32,7 +29,7 @@ def fetch_weather_data(api_key: str, city: str,  state: str = None, country: str
         # raise an error for bad HTTP codes
         response.raise_for_status()
 
-        # returns as a dictionary, so we must use bracket notation in the return 
+        # returns as a dictionary as defined above, so we must use bracket notation in the return 
         data = response.json()  
 
         return {
