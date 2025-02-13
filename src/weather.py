@@ -5,7 +5,7 @@ class WeatherFormatter:
 
         time_str = datetime.fromtimestamp(data['time_of_forecast']).strftime('%I:%M %p, %B %d, %Y')
         condition = data['weather_conditions'][0]['condition']
-        description = data['weather_conditions'][0]['condition']
+        description = data['weather_conditions'][0]['description']
 
         # get recommendations based on weather meeting report meeting various conditions
         advisory = WeatherFormatter._get_weather_advisory(data)
@@ -27,7 +27,7 @@ Recommendations:
 {clothing}"""
         
         if advisory:
-            weather_report_output += f"\n {advisory}"
+            weather_report_output += f"\n{advisory}"
         
         return weather_report_output
     
